@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -67,22 +68,21 @@ public class benchmark {
 
             int flagMain = 0;
             for(Method method : methods){
-                //System.out.println(method.getName());
                 if (method.getName().equals("main")){
                     flagMain++;
                     System.out.println("Classe: " + c.getName() + "\tContém main: Sim");
-                    dataLines.add(new String[] { c.getName(), "Sim", "-"});
-                    /*try {
-                        Method currentMethod = currentClass.getMethod("main", String.class);
-                        Object[] parametro = new Object[1];
-                        parametro[0] = "";
-                        Object resultado = currentMethod.invoke(currentClass.newInstance(), parametro);
+                    //dataLines.add(new String[] { c.getName(), "Sim", "-"});
+                    try {
+                        Method currentMethod = currentClass.getMethod("main", String[].class);
+                        String[] parameter = null;
+                        System.out.println("Chamada a main:");
+                        dataLines.add(new String[] { c.getName(), "Sim", (String) currentMethod.invoke(null, (Object) parameter)});
+                        //currentMethod.invoke(null, (Object) parameter);
 
-                        System.out.println("Chamada a main: " + resultado);
-
-                    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
+                    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                        dataLines.add(new String[] { c.getName(), "Sim", e.toString()});
                         e.printStackTrace();
-                    }*/
+                    }
                 }
             }
             if(flagMain == 0){
@@ -90,6 +90,7 @@ public class benchmark {
                 dataLines.add(new String[] { c.getName(), "Nao", "-"});
             }
         }
+        System.out.println("\n");
         new benchmark().givenDataArray_whenConvertToCSV_thenOutputCreated();
     }
 }
