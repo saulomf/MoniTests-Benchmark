@@ -71,16 +71,15 @@ public class benchmark {
                 if (method.getName().equals("main")){
                     flagMain++;
                     System.out.println("Classe: " + c.getName() + "\tContém main: Sim");
-                    //dataLines.add(new String[] { c.getName(), "Sim", "-"});
                     try {
                         Method currentMethod = currentClass.getMethod("main", String[].class);
                         String[] parameter = null;
                         System.out.println("Chamada a main:");
-                        dataLines.add(new String[] { c.getName(), "Sim", (String) currentMethod.invoke(null, (Object) parameter)});
-                        //currentMethod.invoke(null, (Object) parameter);
+                        currentMethod.invoke(null, (Object) parameter);
+                        dataLines.add(new String[] { c.getName(), "Sim", "Sucesso"});
 
                     } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                        dataLines.add(new String[] { c.getName(), "Sim", e.toString()});
+                        dataLines.add(new String[] { c.getName(), "Sim", String.valueOf(e)});
                         e.printStackTrace();
                     }
                 }
